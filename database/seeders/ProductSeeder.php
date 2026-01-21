@@ -94,6 +94,22 @@ class ProductSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'name' => 'Мышь беспроводная Logitech G304 LIGHTSPEED [910-005286] черный',
+                'description' => 'Мышь беспроводная Logitech G304 LIGHTSPEED [910-005286] черный Игровой. Мышь беспроводная Logitech G304 LIGHTSPEED [910-005286] черный [12000 dpi, светодиодный, USB Type-A, кнопки - 6]',
+                'price' => 2999,
+                'category_id' => 4,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'Мышь проводная ARDOR GAMING Fury [ARD-FURY3327-BK] черный',
+                'description' => 'Мышь проводная ARDOR GAMING Fury [ARD-FURY3327-BK] черный [12400 dpi, светодиодный, USB Type-A, кнопки - 7]',
+                'price' => 1499,
+                'category_id' => 4,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ]);
     }
 }
