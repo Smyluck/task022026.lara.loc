@@ -10,4 +10,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/categories', [CategoryController::class, 'index']);
-Route::resource('products', ProductController::class);
+Route::resource('products', ProductController::class)->only('index', 'store', 'show', 'update', 'destroy');

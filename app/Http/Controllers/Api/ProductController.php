@@ -33,14 +33,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(ProductRequest $request)
@@ -91,13 +83,6 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -110,7 +95,7 @@ class ProductController extends Controller
             $product->update($validated);
 
             return (new ProductResource($product))
-            ->additional(['success' => true])
+                ->additional(['success' => true])
                 ->response()
                 ->setStatusCode(Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
@@ -139,7 +124,7 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             $product->delete();
 
-            return response()->json(['success' => true], Response::HTTP_OK); 
+            return response()->json(['success' => true], Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
