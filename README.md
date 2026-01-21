@@ -57,3 +57,23 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Instalation
+
+```bash
+composer install
+
+./vendor/bin/sail up -d
+
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)' 
+
+sail artisan migrate
+
+sail artisan db:seed --class=CategorySeeder
+
+sail artisan db:seed --class=ProductSeeder
+```
+
+## Developer
+
+Maria Smyluck
