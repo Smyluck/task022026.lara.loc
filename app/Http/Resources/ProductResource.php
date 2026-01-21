@@ -21,7 +21,8 @@ class ProductResource extends JsonResource
             'category' => [
                 'id' => $this->category->id,
                 'name' => $this->category->name,
-            ]
+            ],
+            'deleted_at' => $this->deleted_at
         ];
     }
 

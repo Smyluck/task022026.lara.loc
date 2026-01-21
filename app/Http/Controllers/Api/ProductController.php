@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
         try {
             $perPage = $request->input('per_page', 10);
-            $products = Product::with('category')->paginate($perPage);
+            $products = Product::with('category')->withTrashed()->paginate($perPage);
 
             return (new ProductCollection($products))->response()->setStatusCode(Response::HTTP_OK);
         } catch (\Exception $e) {
@@ -68,7 +68,7 @@ class ProductController extends Controller
     public function show(string $id)
     {
         try {
-            $product = Product::with('category')->findOrFail($id);
+            $product = Product::with('category')->withTrashed()->findOrFail($id);
 
             return (new ProductResource($product))
                 ->additional(['success' => true])
@@ -105,7 +105,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, string $id)
     {
         try {
-            $product = Product::with('category')->findOrFail($id);
+            $product = Product::with('category')->withTrashed()->findOrFail($id);
             $validated = $request->validated();
             $product->update($validated);
 
