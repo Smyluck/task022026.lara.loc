@@ -26,6 +26,7 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'description' => 'nullable|string',
             'price' => 'required|decimal:0,2|gt:0',
             'category_id' => 'required|exists:categories,id',
         ];
@@ -35,6 +36,8 @@ class ProductRequest extends FormRequest
     {
         return [
             'name.required' => 'Поле "Название" обязательно для заполнения.',
+            'description.nullable' => 'Поле "Описание" м.б. нулевым',
+            'description.string' => 'Поле "Описание" м.б. строковое',
             'price.gt' => 'Поле "Цена" должно больше нуля',
             'price.required' => 'Поле "Цена" обязательно для заполнения.',
             'price.decimal' => 'Поле "Цена" содержит десятичные от 0 до 2',
