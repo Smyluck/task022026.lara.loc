@@ -1,0 +1,57 @@
+{
+    "name": "Laravel Sail",
+
+    // ✅ ИСПРАВЛЕНО: Указываем правильный путь к файлу, который лежит в корне проекта
+    "dockerComposeFile": ["../compose.yaml"],
+
+    // ✅ Указываем сервис, к которому будем подключаться
+    "service": "laravel.test",
+
+    // ✅ ИСПРАВЛЕНО: Стандартный путь к проекту внутри контейнера Sail
+    "workspaceFolder": "/var/www/html",
+
+    // ✅ Задаем пользователя, от которого будет работать VS Code в контейнере
+    "remoteUser": "sail",
+
+    "forwardPorts": [80, 9003],
+
+    "customizations": {
+        "vscode": {
+            // Список расширений, которые установятся в контейнере
+            "extensions": [
+                "open-southeners.laravel-pint",
+                "bmewburn.vscode-intelephense-client",
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "esbenp.prettier-vscode",
+                "Vue.volar",
+                "onecentlin.laravel-blade-formatter",
+                "bradlc.vscode-tailwindcss",
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "nhedger.inertia",
+                "mtxr.sqltools",
+                "mtxr.sqltools-driver-pg",
+                "dbaeumer.vscode-eslint",
+                "xdebug.php-debug",
+                "porifa.laravel-intelephense",
+                "onecentlin.laravel-blade"
+            ],
+            // Эти настройки будут применяться только ВНУТРИ Dev Container
+            "settings": {
+                // Настройки для автоматического форматирования Pint
+                "[php]": {
+                    "editor.defaultFormatter": "open-southeners.laravel-pint",
+                    "editor.formatOnSave": true
+                },
+                "laravel-pint.enable": true,
+                "laravel-pint.useStdIn": true, // stdin обычно работает надежнее всего внутри контейнера
+
+                // Укажите реальную версию PHP из вашего контейнера
+                "intelephense.environment.phpVersion": "8.5",
+                "php.debug.executablePath": "/usr/bin/php"
+            }
+        }
+    },
+
+    // ✅ ИСПРАВЛЕНО: Команды, которые выполнятся после создания контейнера
+    "postCreateCommand": "composer install && chown -R sail:sail /var/www/html/storage /var/www/html/bootstrap/cache"
+}
