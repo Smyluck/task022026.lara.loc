@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-         try {
+        try {
             $credentials = $request->validate([
                 'email' => 'required|email',
                 'password' => 'required',

@@ -14,9 +14,7 @@ const props = defineProps({
     <Head :title="props.title" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ props.title }}
-            </h2>
         </template>
 
         <ProductList :products="products" :categories="categories" />

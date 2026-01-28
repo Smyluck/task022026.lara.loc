@@ -1,20 +1,15 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\Web\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [ProductController::class, 'index'])->name('welcome');
+Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 
-Route::get('/dashboard', function () {
+Route::get('/admin', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
