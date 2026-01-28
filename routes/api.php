@@ -6,11 +6,14 @@ use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::name('api.')->group(function () {
 
-Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->middleware('auth:sanctum');
 
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::resource('products', ProductController::class)->only('index', 'store', 'show', 'update', 'destroy');
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::resource('products', ProductController::class)->only('index', 'store', 'show', 'update', 'destroy');
+});
