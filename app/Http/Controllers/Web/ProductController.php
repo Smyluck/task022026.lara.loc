@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Models\Category;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
@@ -26,11 +25,22 @@ class ProductController extends Controller
 
             $request->validate([
                 'category' => 'nullable|exists:categories,id',
+                'q' => 'nullable',
             ]);
 
             $products = Product::with('category')
                 ->when($request->input('category'), function ($query, $categoryId) {
                     $query->where('category_id', $categoryId);
+                })
+                ->when($request->input('q'), function ($query, $search) {
+                    $query->where(function ($query) use ($search) {
+                        $query->where('name', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%")
+                            ->orWhere('price', 'like', "%{$search}%")
+                            ->orWhereHas('category', function ($query) use ($search) {
+                                $query->where('name', 'like', "%{$search}%");
+                            });
+                    });
                 })
                 ->paginate(10)
                 ->withQueryString();
@@ -38,7 +48,7 @@ class ProductController extends Controller
             if ($products->isEmpty()) {
                 return Inertia::render('Products/Index', [
                     'title' => 'Список товаров',
-                    'filters' => $request->only(['category']),
+                    'filters' => $request->only(['category', 'q']),
                 ])->with('flash', [
                     'warning' => 'Товары не найдены.',
                 ]);
@@ -47,7 +57,7 @@ class ProductController extends Controller
             return Inertia::render('Products/Index', [
                 'title' => $title,
                 'products' => $products,
-                'filters' => $request->only(['category']),
+                'filters' => $request->only(['category', 'q']),
             ])->with('flash', [
                 'success' => session('success'),
                 'warning' => session('warning'),
