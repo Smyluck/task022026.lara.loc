@@ -1,10 +1,16 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onUnmounted } from "vue";
 import axios from "axios";
+import { router } from "@inertiajs/vue3";
 
 const model = defineModel({
-    type: Number,
-    required: false,
+    validator: (value) => {
+        return (
+            typeof value === "string" ||
+            typeof value === "number" ||
+            value == null
+        );
+    },
 });
 
 const select = ref(null);
@@ -14,17 +20,33 @@ const props = defineProps({
     url: String,
 });
 
-onMounted(async () => {
-    if (select.value?.hasAttribute("autofocus")) {
-        setTimeout(() => select.value?.focus(), 100);
-    }
-
+const loadItems = async () => {
     try {
+        const token = localStorage?.getItem("authToken");
+        if (token) {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        } else {
+            delete axios.defaults.headers.common["Authorization"];
+        }
         const response = await axios.get(props.url);
         items.value = response.data;
     } catch (err) {
         console.error("Ошибка загрузки категорий:", err);
     }
+};
+
+const handleLogout = () => {
+    items.value = []; // Очищаем данные
+    loadItems(); // Перезагружаем данные
+};
+
+onMounted(() => {
+    loadItems();
+    window.addEventListener("logout", handleLogout); // Добавляем прослушивание события
+});
+
+onUnmounted(() => {
+    window.removeEventListener("logout", handleLogout); // Удаляем прослушивание события
 });
 
 defineExpose({ focus: () => select.value.focus() });

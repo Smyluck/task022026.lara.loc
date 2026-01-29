@@ -5,9 +5,15 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 
 const showingNavigationDropdown = ref(false);
+
+const logout = () => {
+    localStorage.removeItem("authToken");
+    window.dispatchEvent(new Event("logout"));
+    router.post(route("logout"));
+};
 </script>
 
 <template>
@@ -44,9 +50,7 @@ const showingNavigationDropdown = ref(false);
                     v-if="$page.props.auth.user"
                     class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                 >
-                    <NavLink :href="route('logout')" method="post">
-                        Выйти
-                    </NavLink>
+                    <NavLink @click="logout" method="post"> Выйти </NavLink>
                 </div>
                 <div v-else class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <NavLink :href="route('login')"> Войти </NavLink>
@@ -116,17 +120,13 @@ const showingNavigationDropdown = ref(false);
                 v-if="$page.props.auth.user"
                 class="border-t border-gray-200 pb-1 pt-4"
             >
-                <ResponsiveNavLink
-                    :href="route('logout')"
-                    method="post"
-                    as="button"
-                >
+                <ResponsiveNavLink @click="logout" as="button">
                     Выйти
                 </ResponsiveNavLink>
             </div>
             <div v-else class="border-t border-gray-200 pb-1 pt-4">
                 <ResponsiveNavLink
-                    :href="route('logout')"
+                    :href="route('login')"
                     method="post"
                     as="button"
                 >

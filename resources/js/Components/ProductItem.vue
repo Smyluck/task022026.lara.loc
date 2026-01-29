@@ -17,7 +17,7 @@ defineProps({
         <h3 class="text-gray-700 font-semibold">
             {{ product.name }}
         </h3>
-        <div class="mt-2">
+        <div class="mt-2 break-words">
             <p class="text-gray-600">
                 <span class="font-medium">Категория:</span>
                 {{ product.category?.name || "Без категории" }}

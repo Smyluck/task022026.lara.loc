@@ -6,6 +6,7 @@ import Filter from "@/Components/Filter.vue";
 
 defineProps({
     products: Object,
+    filters: Object,
 });
 </script>
 
@@ -21,7 +22,7 @@ defineProps({
         </Link>
     </div>
 
-    <Filter />
+    <Filter :filters="filters" />
 
     <div v-if="products">
         <div class="grid grid-cols-1 gap-5">
