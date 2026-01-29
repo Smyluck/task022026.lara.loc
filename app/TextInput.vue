@@ -2,9 +2,8 @@
 import { onMounted, ref } from "vue";
 
 const model = defineModel({
-    validator: (value) => {
-        return typeof value === "string" || typeof value === "number";
-    },
+    type: String,
+    required: true,
 });
 
 const input = ref(null);

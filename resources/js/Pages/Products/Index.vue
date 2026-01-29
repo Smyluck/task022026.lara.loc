@@ -5,8 +5,7 @@ import ProductList from "@/Components/ProductList.vue";
 
 const props = defineProps({
     title: String,
-    products: Object,
-    categories: Object,
+    products: Object
 });
 </script>
 
@@ -17,6 +16,6 @@ const props = defineProps({
                 {{ props.title }}
         </template>
 
-        <ProductList :products="products" :categories="categories" />
+        <ProductList :products="products"  />
     </AuthenticatedLayout>
 </template>

@@ -31,5 +31,23 @@ defineProps({
                 {{ product.description }}
             </p>
         </div>
+        <div
+            class="mt-2 flex gap-3 flex-col md:flex-row"
+            v-if="
+                $page.props.auth.user && route().current('admin.products.index')
+            "
+        >
+            <Link
+                :href="route('admin.products.edit', product.id)"
+                class="bg-white hover:border-gray-300 hover:text-white border-gray-600 text-gray-600 hover:bg-gray-500 p-2 rounded text-center"
+                >Редактировать</Link
+            >
+            <Link
+                :href="route('admin.products.destroy', product.id)"
+                method="delete"
+                class="bg-white hover:border-gray-300 hover:text-white border-gray-600 text-gray-600 hover:bg-gray-500 p-2 rounded"
+                >Удалить</Link
+            >
+        </div>
     </Link>
 </template>

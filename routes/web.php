@@ -9,9 +9,14 @@ Route::get('/', [ProductController::class, 'index'])->name('welcome');
 Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 
-Route::get('/admin', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::resource('products', ProductController::class);
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

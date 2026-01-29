@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductRequest extends FormRequest
@@ -27,8 +28,8 @@ class ProductRequest extends FormRequest
         return [
             'name' => 'required',
             'description' => 'nullable|string',
-            'price' => 'required|decimal:0,2|gt:0',
-            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|decimal:0,2|max:999999.99|gt:0',
+            'category_id' => 'nullable|exists:categories,id',
         ];
     }
 
@@ -41,6 +42,7 @@ class ProductRequest extends FormRequest
             'price.gt' => 'Поле "Цена" должно больше нуля',
             'price.required' => 'Поле "Цена" обязательно для заполнения.',
             'price.decimal' => 'Поле "Цена" содержит десятичные от 0 до 2',
+            'price.max' => 'Поле "Цена"  больше 999999.99',
             'category_id.required' => 'Поле "Категория" обязательно для заполнения.',
             'category_id.exists' => 'Категория не существует.',
         ];
@@ -48,10 +50,13 @@ class ProductRequest extends FormRequest
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json([
-            'success' => false,
-            'message' => 'Ошибка валидации',
-            'errors' => $validator->errors(),
-        ], Response::HTTP_UNPROCESSABLE_ENTITY));
+        if (Str::startsWith($this->route()->uri(), 'api/')) {
+            throw new HttpResponseException(response()->json([
+                'success' => false,
+                'message' => 'Ошибка валидации',
+                'errors' => $validator->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY));
+        }
+        parent::failedValidation($validator);
     }
 }

@@ -12,8 +12,8 @@ Route::name('api.')->group(function () {
         return $request->user();
     })->middleware('auth:sanctum');
 
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->name("login");
 
-    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories', [CategoryController::class, 'index'])->name("categories.index");
     Route::resource('products', ProductController::class)->only('index', 'store', 'show', 'update', 'destroy');
 });
