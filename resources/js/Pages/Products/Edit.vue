@@ -100,7 +100,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Добавить
+                    {{ props.product ? "Редактировать" : "Добавить" }}
                 </PrimaryButton>
             </div>
         </form>

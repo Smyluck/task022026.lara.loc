@@ -1,12 +1,39 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3";
+import { ref } from "vue";
+import NavLink from "./NavLink.vue";
+import Modal from "./Modal.vue";
+import DangerButton from "./DangerButton.vue";
+import SecondaryButton from "./SecondaryButton.vue";
 
-defineProps({
+const props = defineProps({
     product: {
         type: Object,
         required: true,
     },
 });
+
+const form = useForm({});
+
+const confirmingProductDeletion = ref(false);
+
+const deleteProduct = () => {
+    form.delete(route("admin.products.destroy", props.product.id), {
+        preserveScroll: true,
+        onSuccess: () => closeModal(),
+        // onError: () => passwordInput.value.focus(),
+        // onFinish: () => form.reset(),
+    });
+};
+
+const closeModal = () => {
+    confirmingProductDeletion.value = false;
+    form.reset();
+};
+
+const corfirmProductDeletion = () => {
+    confirmingProductDeletion.value = true;
+};
 </script>
 
 <template>
@@ -42,12 +69,31 @@ defineProps({
                 class="bg-white hover:border-gray-300 hover:text-white border-gray-600 text-gray-600 hover:bg-gray-500 p-2 rounded text-center"
                 >Редактировать</Link
             >
-            <Link
-                :href="route('admin.products.destroy', product.id)"
-                method="delete"
-                class="bg-white hover:border-gray-300 hover:text-white border-gray-600 text-gray-600 hover:bg-gray-500 p-2 rounded"
-                >Удалить</Link
+
+            <DangerButton @click.prevent="corfirmProductDeletion"
+                >Удалить</DangerButton
             >
         </div>
     </Link>
+
+    <Modal :show="confirmingProductDeletion" @close="closeModal">
+        <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900">Удалить товар?</h2>
+
+            <p class="mt-1 text-sm text-gray-600">Вы уверены?</p>
+
+            <div class="mt-6 flex justify-end">
+                <SecondaryButton @click="closeModal"> Нет </SecondaryButton>
+
+                <DangerButton
+                    class="ms-3"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                    @click="deleteProduct()"
+                >
+                    Да
+                </DangerButton>
+            </div>
+        </div>
+    </Modal>
 </template>
