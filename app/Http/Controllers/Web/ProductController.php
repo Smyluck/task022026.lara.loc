@@ -7,6 +7,7 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Redirect;
 
@@ -33,12 +34,13 @@ class ProductController extends Controller
                     $query->where('category_id', $categoryId);
                 })
                 ->when($request->input('q'), function ($query, $search) {
-                    $query->where(function ($query) use ($search) {
-                        $query->where('name', 'like', "%{$search}%")
-                            ->orWhere('description', 'like', "%{$search}%")
+                    $lowerSearch = mb_strtolower($search);
+                    $query->where(function ($query) use ($lowerSearch, $search) {
+                        $query->where(DB::raw('LOWER(name)'), 'like', "%{$lowerSearch}%")
+                            ->orWhere(DB::raw('LOWER(description)'), 'like', "%{$lowerSearch}%")
                             ->orWhere('price', 'like', "%{$search}%")
-                            ->orWhereHas('category', function ($query) use ($search) {
-                                $query->where('name', 'like', "%{$search}%");
+                            ->orWhereHas('category', function ($query) use ($lowerSearch) {
+                                $query->where(DB::raw('LOWER(name)'), 'like', "%{$lowerSearch}%");
                             });
                     });
                 })
