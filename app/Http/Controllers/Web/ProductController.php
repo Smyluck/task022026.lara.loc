@@ -86,12 +86,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Products/Edit', ['title' => 'Создание товара'])->with('flash', [
-            'success' => session('success'),
-            'warning' => session('warning'),
-            'error' => session('error'),
-        ]
-        );
+        return Inertia::render('Products/Edit', ['title' => 'Создание товара']);
     }
 
     /**
@@ -99,7 +94,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return Inertia::render('Products/Edit', ['product' => $product, 'title' => 'Редактирование товара']);
+        return Inertia::render('Products/Edit', ['product' => $product, 'title' => 'Редактирование товара '.$product->id]);
     }
 
     /**
@@ -124,12 +119,12 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-       try {
+        try {
             $validated = $request->validated();
             $product->update($validated);
 
             return Redirect::route('admin.products.index')
-                ->with('success', 'Товар '.$product->id.' создан');
+                ->with('success', 'Товар '.$product->id.' обновлен');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

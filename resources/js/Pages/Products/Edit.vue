@@ -8,19 +8,24 @@ import { Head, Link, useForm } from "@inertiajs/vue3";
 import Textarea from "@/Components/Textarea.vue";
 import Select from "@/Components/Select.vue";
 
-const form = useForm({
-    name: "",
-    description: "",
-    price: "",
-    category_id: null,
-});
-
 const props = defineProps({
     title: String,
+    product: { type: Object, default: null },
+});
+
+const form = useForm({
+    name: props.product?.name ?? "",
+    description: props.product?.description ?? "",
+    price: props.product?.price ?? "",
+    category_id: props.product?.category_id ?? null,
 });
 
 const submit = () => {
-    form.post(route("admin.products.store"));
+    if (props.product) {
+        form.put(route("admin.products.update", props.product.id));
+    } else {
+        form.post(route("admin.products.store"));
+    }
 };
 </script>
 
